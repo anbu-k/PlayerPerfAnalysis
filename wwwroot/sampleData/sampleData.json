@@ -1,0 +1,21 @@
+[
+    {
+      "PlayerName": "John Doe",
+      "Team": "Team A",
+      "GamesPlayed": 30,
+      "PointsPerGame": 22.5,
+      "FieldGoalPercentage": 45.5,
+      "AssistsPerGame": 5.2,
+      "ReboundsPerGame": 7.1
+    },
+    {
+      "PlayerName": "Jane Smith",
+      "Team": "Team B",
+      "GamesPlayed": 28,
+      "PointsPerGame": 18.3,
+      "FieldGoalPercentage": 40.2,
+      "AssistsPerGame": 6.4,
+      "ReboundsPerGame": 9.3
+    }
+  ]
+  

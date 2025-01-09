@@ -1,0 +1,68 @@
+@page
+@model PlayerPerfAnalysis.Pages.Dashboard.IndexModel
+@inject PlayerPerfAnalysis.Services.SportsDataService SportsDataService
+
+<h2>NBA Teams</h2>
+
+<!-- Display list of teams -->
+<div class="row">
+    @foreach (var team in Model.Teams)
+    {
+        <div class="col-md-3 mb-3">
+            <form method="post" asp-page-handler="ViewRoster">
+                <input type="hidden" name="teamId" value="@team.Id" />
+                <button class="btn btn-primary w-100" type="submit">
+                    @team.FullName
+                </button>
+            </form>
+        </div>
+    }
+</div>
+
+<!-- Display team roster when a team is clicked -->
+@if (Model.TeamRoster.Any())
+{
+    <h3>Team Roster for @Model.TeamRoster.FirstOrDefault()?.Team?.FullName</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Position</th>
+                <th>Height</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model.TeamRoster)
+            {
+                <tr>
+                    <td>@player.FirstName @player.LastName</td>
+                    <td>@player.Position</td>
+                    <td>@player.Height</td>
+                    <td>
+                        <form method="post" asp-page-handler="ViewPlayerStats">
+                            <input type="hidden" name="playerId" value="@player.Id" />
+                            <button class="btn btn-info" type="submit">
+                                View Stats
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Display player stats when a player is selected -->
+@if (Model.SelectedPlayer != null)
+{
+    <h3>@Model.SelectedPlayer.FirstName @Model.SelectedPlayer.LastName - Stats</h3>
+    <ul>
+        <li>Height: @Model.SelectedPlayer.Height</li>
+        <li>Weight: @Model.SelectedPlayer.Weight lbs</li>
+        <li>Position: @Model.SelectedPlayer.Position</li>
+        <li>Jersey Number: @Model.SelectedPlayer.JerseyNumber</li>
+        <li>College: @Model.SelectedPlayer.College</li>
+        <li>Team: @Model.SelectedPlayer.Team.FullName</li>
+    </ul>
+}
