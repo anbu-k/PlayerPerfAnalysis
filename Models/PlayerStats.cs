@@ -17,8 +17,8 @@ namespace PlayerPerfAnalysis.Models
         [JsonProperty("height")]  // Height (e.g., 6'3")
         public string Height { get; set; } = string.Empty;
 
-        [JsonProperty("weight")]  // Weight in pounds
-        public int Weight { get; set; }
+        [JsonProperty("weight")]  // Weight in pounds (nullable)
+        public int? Weight { get; set; }  // Changed to int?
 
         [JsonProperty("jersey_number")]  // Jersey number
         public string JerseyNumber { get; set; } = string.Empty;

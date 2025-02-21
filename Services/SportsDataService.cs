@@ -39,7 +39,26 @@ namespace PlayerPerfAnalysis.Services
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<Team>>(jsonResponse);
-                return apiResponse?.Data ?? new List<Team>();
+
+                // Define a list of current NBA team names
+                var currentNBATeamNames = new HashSet<string>
+        {
+            "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets", "Chicago Bulls",
+            "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets", "Detroit Pistons", "Golden State Warriors",
+            "Houston Rockets", "Indiana Pacers", "LA Clippers", "Los Angeles Lakers", "Memphis Grizzlies",
+            "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves", "New Orleans Pelicans", "New York Knicks",
+            "Oklahoma City Thunder", "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers",
+            "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", "Utah Jazz", "Washington Wizards"
+        };
+
+                // Filter teams based on the list and remove duplicates by team ID
+                var currentNBATeams = apiResponse?.Data
+                    .Where(team => currentNBATeamNames.Contains(team.FullName))
+                    .GroupBy(team => team.Id)  // Group by team ID
+                    .Select(group => group.First())  // Select the first entry in each group
+                    .ToList();
+
+                return currentNBATeams ?? new List<Team>();
             }
             catch (Exception ex)
             {
@@ -65,8 +84,17 @@ namespace PlayerPerfAnalysis.Services
                 }
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonResponse); // Debugging: Log the API response
+
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse<PlayerStats>>(jsonResponse);
-                return apiResponse?.Data ?? new List<PlayerStats>();
+
+                // Filter out duplicates by player ID
+                var uniquePlayers = apiResponse?.Data
+                    .GroupBy(player => player.Id)
+                    .Select(group => group.First())
+                    .ToList();
+
+                return uniquePlayers ?? new List<PlayerStats>();
             }
             catch (Exception ex)
             {
